@@ -200,7 +200,7 @@ Notifications.localNotificationSchedule = function(details) {
 		details.fireDate = details.date.getTime();
 		delete details.date;
 		// ignore iOS only repeatType
-		if (['year'].includes(details.repeatType)) {
+		if (['year', 'month'].includes(details.repeatType)) {
 			delete details.repeatType;
 		}
 		this.handler.scheduleLocalNotification(details);
