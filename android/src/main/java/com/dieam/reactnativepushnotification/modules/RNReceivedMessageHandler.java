@@ -15,7 +15,7 @@ import android.util.Log;
 
 import com.dieam.reactnativepushnotification.helpers.ApplicationBadgeHelper;
 import com.dieam.reactnativepushnotification.modules.RNPushNotificationHelper;
- import com.dieam.reactnativepushnotification.modules.RNPushNotificationJsDelivery;
+import com.dieam.reactnativepushnotification.modules.RNPushNotificationJsDelivery;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.bridge.Arguments;
@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Random;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static com.dieam.reactnativepushnotification.modules.RNPushNotification.LOG_TAG;
 
 public class RNReceivedMessageHandler {
@@ -76,7 +77,7 @@ public class RNReceivedMessageHandler {
 
             final int badge = data.optInt("badge", -1);
             if (badge >= 0) {
-                ApplicationBadgeHelper.INSTANCE.setApplicationIconBadgeNumber(mFirebaseMessagingService, badge);
+                ApplicationBadgeHelper.INSTANCE.setApplicationIconBadgeNumber(this.mFirebaseMessagingService, badge);
             }
         }
 
@@ -95,7 +96,7 @@ public class RNReceivedMessageHandler {
         handler.post(new Runnable() {
             public void run() {
                 // Construct and load our normal React JS code bundle
-                ReactInstanceManager mReactInstanceManager = ((ReactApplication) mFirebaseMessagingService.getApplication()).getReactNativeHost().getReactInstanceManager();
+                ReactInstanceManager mReactInstanceManager = ((ReactApplication) this.mFirebaseMessagingService.getApplication()).getReactNativeHost().getReactInstanceManager();
                 ReactContext context = mReactInstanceManager.getCurrentReactContext();
                 // If it's constructed, send a notificationre
                 if (context != null) {
@@ -156,11 +157,11 @@ public class RNReceivedMessageHandler {
     }
 
     private boolean isApplicationInForeground() {
-        ActivityManager activityManager = (ActivityManager) mFirebaseMessagingService.getSystemService(ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) this.mFirebaseMessagingService.getSystemService(ACTIVITY_SERVICE);
         List<RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
         if (processInfos != null) {
             for (RunningAppProcessInfo processInfo : processInfos) {
-                    if (processInfo.processName.equals(mFirebaseMessagingService.getApplication().getPackageName())
+                    if (processInfo.processName.equals(this.mFirebaseMessagingService.getApplication().getPackageName())
                     && processInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND
                     && processInfo.pkgList.length > 0) {
                     return true;
