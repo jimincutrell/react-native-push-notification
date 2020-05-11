@@ -170,7 +170,7 @@ public class RNReceivedMessageHandler {
             bundle.putString("id", String.valueOf(randomNumberGenerator.nextInt()));
         }
 
-        RNPushNotificationConfig config = new RNPushNotificationConfig(getApplication());
+        RNPushNotificationConfig config = new RNPushNotificationConfig(mFirebaseMessagingService.getApplication());
 
         Boolean isForeground = isApplicationInForeground();
 
